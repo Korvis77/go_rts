@@ -73,22 +73,50 @@ func NodeSequence(nodeSequence string, unitID int, x int, y int) Unit {
 }
 
 func NodeSequence2x2(passedUnitID int, passedx int, passedy int) Unit {
-	//node1slice := []int{2, 3, 4}
+
+	var nodex int = passedx
+	var nodey int = passedy
 	node1 := Node{
 		unitID:        1,
 		nodeID:        1,
-		x:             passedx,
-		y:             passedy,
+		x:             nodex,
+		y:             nodey,
 		xVel:          0,
 		yVel:          0,
 		neighborNodes: []int{2, 3, 4},
 	}
-	//node1.neighborNodes = node1slice
-
+	nodex -= 5
+	node2 := Node{
+		unitID:        1,
+		nodeID:        1,
+		x:             nodex,
+		y:             nodey,
+		xVel:          0,
+		yVel:          0,
+		neighborNodes: []int{2, 3, 4},
+	}
+	//offset x and y +- passed
+	// make more nodes here and return lol
 	return Unit{
 		unitID: passedUnitID,
 		x:      passedx,
 		y:      passedy,
-		Nodes:  []Node{node1},
+		Nodes:  []Node{node1, node2},
 	}
 }
+
+func MoveUnit(xVel int, yVel int, rotation int) {
+	for i := range 1 {
+		fmt.Println(i)
+	}
+}
+
+/* vector length, this is the hypotenuse,
+   hypotenuse (vector length a.k.a. offset from x and y)
+   cosine for x, sine for y,
+   arctan(yoffset/xoffset)
+   rotation (passed into the function)
+
+   hypotenuse * cos/sin (arctan*(yoffset/xoffset) + rotation)
+                         ^^^ solve once, becomes theta
+*/
