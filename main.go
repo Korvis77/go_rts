@@ -29,81 +29,143 @@ func main() {
 		log.Fatal(err)
 	}
 
-	myUnit := NodeSequence("2x2", 1, 10, 20)
+	unit1 := SpawnUnit(1, "2x2", 100, 100)
+
+	fmt.Printf("(%d)", unit1.unitID)
+
+	//myUnit := NodeSequence("2x2", 1, 10, 20)
 
 	// Print the unit-level fields
-	fmt.Printf("Unit ID: %d\n", myUnit.unitID)
-	fmt.Printf("Unit X: %d\n", myUnit.x)
-	fmt.Printf("Unit Y: %d\n", myUnit.y)
+	// fmt.Printf("Unit ID: %d\n", myUnit.unitID)
+	// fmt.Printf("Unit X: %d\n", myUnit.x)
+	// fmt.Printf("Unit Y: %d\n", myUnit.y)
 
-	// Loop over the nodes and print each one
-	for _, node := range myUnit.Nodes {
-		fmt.Printf("  Node ID: %d\n", node.nodeID)
-		fmt.Printf("  Position: (%d, %d)\n", node.x, node.y)
-		fmt.Printf("  Velocity: (%d, %d)\n", node.xVel, node.yVel)
-		fmt.Printf("  Neighbors: %v\n", node.neighborNodes)
-		fmt.Println("  ---")
-	}
+	// // Loop over the nodes and print each one
+	// for _, node := range myUnit.Nodes {
+	// 	fmt.Printf("  Node ID: %d\n", node.nodeID)
+	// 	fmt.Printf("  Position: (%d, %d)\n", node.x, node.y)
+	// 	fmt.Printf("  Velocity: (%d, %d)\n", node.xVel, node.yVel)
+	// 	fmt.Printf("  Neighbors: %v\n", node.neighborNodes)
+	// 	fmt.Println("  ---")
+	// }
 
-}
-
-type Node struct {
-	unitID        int
-	nodeID        int
-	x             int
-	y             int
-	xVel          int
-	yVel          int
-	neighborNodes []int
 }
 
 type Unit struct {
-	unitID int
-	x      int
-	y      int
-	Nodes  []Node
+	unitID   int
+	unitType string
+	x        int
+	y        int
+	Nodes    []NodeCore
 }
 
-func NodeSequence(nodeSequence string, unitID int, x int, y int) Unit {
-	switch nodeSequence {
+type NodeCore struct {
+	unitID       int
+	nodeID       int
+	x            float32
+	y            float32
+	xVel         float32
+	yVel         float32
+	childVectors []NodeVector
+}
+
+type NodeVector struct {
+	parentnodeIDs []int
+	xvectoroffset float32
+	yvectoroffset float32
+	xsummedforces float32
+	ysummedforces float32
+}
+
+func SpawnUnit(
+	unitID int,
+	unitType string,
+	x int,
+	y int,
+) Unit {
+	switch unitType {
 	case "2x2":
-		return NodeSequence2x2(unitID, x, y)
+		GenerateNodes2x2(unitID, x, y)
 	}
 	return Unit{}
 }
 
-func NodeSequence2x2(passedUnitID int, passedx int, passedy int) Unit {
+func GenerateNodes2x2(unitID int, passedx int, passedy int) {
+	curx := float32(passedx)
+	cury := float32(passedy)
+	curx -= 5
 
-	var nodex int = passedx
-	var nodey int = passedy
-	node1 := Node{
-		unitID:        1,
-		nodeID:        1,
-		x:             nodex,
-		y:             nodey,
-		xVel:          0,
-		yVel:          0,
-		neighborNodes: []int{2, 3, 4},
+	nodeVector1 := &NodeVector{
+		parentnodeIDs: []int{1, 2},
+		xvectoroffset: -5,
+		yvectoroffset: 5,
 	}
-	nodex -= 5
-	node2 := Node{
-		unitID:        1,
-		nodeID:        1,
-		x:             nodex,
-		y:             nodey,
-		xVel:          0,
-		yVel:          0,
-		neighborNodes: []int{2, 3, 4},
+
+	node1 := &NodeCore{
+		unitID:       unitID,
+		nodeID:       1,
+		x:            curx,
+		y:            cury,
+		childVectors: []NodeVector{*nodeVector1},
 	}
-	//offset x and y +- passed
-	// make more nodes here and return lol
-	return Unit{
-		unitID: passedUnitID,
-		x:      passedx,
-		y:      passedy,
-		Nodes:  []Node{node1, node2},
-	}
+	curx += 5
+
+	fmt.Printf(" nodeVector1 parentNodes: (%d)\n", nodeVector1.parentnodeIDs)
+	fmt.Printf(" node1 unitId, nodeID: (%d, %d)\n", node1.unitID, node1.nodeID)
+	fmt.Printf(" node1 x, y: (%f, %f)\n", node1.x, node1.y)
+
 }
+
+// func NodeSequence(nodeSequence string, unitID int, x int, y int) Unit {
+// 	switch nodeSequence {
+// 	case "2x2":
+// 		return NodeSequence2x2(unitID, x, y)
+// 	}
+// 	return Unit{}
+// }
+
+// type Node struct {
+// 	unitID        int
+// 	nodeID        int
+// 	x             int
+// 	y             int
+// 	xVel          int
+// 	yVel          int
+// 	neighborNodes []int
+// }
+
+// func NodeSequence2x2(passedUnitID int, passedx int, passedy int) Unit {
+
+// 	var nodex int = passedx
+// 	var nodey int = passedy
+// 	node1 := Node{
+// 		unitID:        1,
+// 		nodeID:        1,
+// 		x:             nodex,
+// 		y:             nodey,
+// 		xVel:          0,
+// 		yVel:          0,
+// 		neighborNodes: []int{2, 3, 4},
+// 	}
+// 	nodex -= 5
+// 	node2 := Node{
+// 		unitID:        1,
+// 		nodeID:        1,
+// 		x:             nodex,
+// 		y:             nodey,
+// 		xVel:          0,
+// 		yVel:          0,
+// 		neighborNodes: []int{2, 3, 4},
+// 	}
+// 	//offset x and y +- passed
+// 	// make more nodes here and return lol
+// 	return Unit{
+// 		unitID: passedUnitID,
+// 		x:      passedx,
+// 		y:      passedy,
+// 		Nodes:  []Node{node1, node2},
+// 	}
+// }
 
 func MoveUnit(xVel int, yVel int, rotation int) {
 	for i := range 1 {
