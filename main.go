@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	_ "image/png"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -9,6 +10,29 @@ import (
 )
 
 type Game struct{}
+
+// Read what Claude was talking about and then do a lot of studying of theory.
+// Time to learn about how to decode an image from the image file's byte slice
+
+// var (
+// 	ebitenImage *ebiten.Image
+// )
+
+// func init() {
+// 	// Decode an image from the image file's byte slice.
+// 	img, _, err := image.Decode(bytes.NewReader(images.Ebiten_png))
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	origEbitenImage := ebiten.NewImageFromImage(img)
+
+// 	s := origEbitenImage.Bounds().Size()
+// 	ebitenImage = ebiten.NewImage(s.X, s.Y)
+
+// 	op := &ebiten.DrawImageOptions{}
+// 	op.ColorScale.ScaleAlpha(1)
+// 	ebitenImage.DrawImage(origEbitenImage, op)
+// }
 
 func (g *Game) Update() error {
 	return nil
