@@ -47,6 +47,15 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 }
 
 func main() {
+
+	ConstructUnitTemplates()
+
+	unit1 := SpawnUnit(1, "2x2")
+	unit2 := SpawnUnit(2, "1NodeTriangle")
+
+	fmt.Printf("(%d)", unit1.unitID)
+	fmt.Printf("(%d)", unit2.unitID)
+
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Hello, World!")
 	if err := ebiten.RunGame(&Game{}); err != nil {
@@ -78,6 +87,14 @@ func main() {
 type Unit struct {
 	unitID       int
 	unitTemplate string
+}
+
+func SpawnUnit(unitIDPassed int, unitTemplatePassed string) Unit {
+	unit1 := Unit{
+		unitID: unitIDPassed
+		unitTemplate: UnitTemplate{unitTemplatePassed}
+	}
+	return unit1
 }
 
 // func SpawnUnit(
