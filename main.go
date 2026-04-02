@@ -53,9 +53,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	unit1 := SpawnUnit(1, "2x2", 100, 100)
+	// unit1 := SpawnUnit(1, "2x2", 100, 100)
 
-	fmt.Printf("(%d)", unit1.unitID)
+	// fmt.Printf("(%d)", unit1.unitID)
 
 	//myUnit := NodeSequence("2x2", 1, 10, 20)
 
@@ -76,69 +76,48 @@ func main() {
 }
 
 type Unit struct {
-	unitID   int
-	unitType string
-	x        int
-	y        int
-	Nodes    []NodeCore
-}
-
-type NodeCore struct {
 	unitID       int
-	nodeID       int
-	x            float32
-	y            float32
-	xVel         float32
-	yVel         float32
-	childVectors []NodeVector
+	unitTemplate string
 }
 
-type NodeVector struct {
-	parentnodeIDs []int
-	xvectoroffset float32
-	yvectoroffset float32
-	xsummedforces float32
-	ysummedforces float32
-}
+// func SpawnUnit(
+// 	unitID int,
+// 	unitType string,
+// 	x int,
+// 	y int,
+// ) Unit {
+// 	switch unitType {
+// 	case "2x2":
+// 		GenerateNodes2x2(unitID, x, y)
+// 	}
+// 	return Unit{}
+// }
 
-func SpawnUnit(
-	unitID int,
-	unitType string,
-	x int,
-	y int,
-) Unit {
-	switch unitType {
-	case "2x2":
-		GenerateNodes2x2(unitID, x, y)
-	}
-	return Unit{}
-}
+// func GenerateNodes2x2(unitID int, passedx int, passedy int) {
+// 	curx := float32(passedx)
+// 	cury := float32(passedy)
+// 	curx -= 5
 
-func GenerateNodes2x2(unitID int, passedx int, passedy int) {
-	curx := float32(passedx)
-	cury := float32(passedy)
-	curx -= 5
+// 	nodeVector1 := &NodeVector{
+// 		parentnodeIDs: []int{1, 2},
+// 		xvectoroffset: -5,
+// 		yvectoroffset: 5,
+// 	}
 
-	nodeVector1 := &NodeVector{
-		parentnodeIDs: []int{1, 2},
-		xvectoroffset: -5,
-		yvectoroffset: 5,
-	}
+// 	node1 := &NodeCore{
+// 		unitID:       unitID,
+// 		nodeID:       1,
+// 		x:            curx,
+// 		y:            cury,
+// 		childVectors: []NodeVector{*nodeVector1},
+// 	}
+// 	curx += 5
 
-	node1 := &NodeCore{
-		unitID:       unitID,
-		nodeID:       1,
-		x:            curx,
-		y:            cury,
-		childVectors: []NodeVector{*nodeVector1},
-	}
-	curx += 5
+// 	fmt.Printf(" nodeVector1 parentNodes: (%d)\n", nodeVector1.parentnodeIDs)
+// 	fmt.Printf(" node1 unitId, nodeID: (%d, %d)\n", node1.unitID, node1.nodeID)
+// 	fmt.Printf(" node1 x, y: (%f, %f)\n", node1.x, node1.y)
 
-	fmt.Printf(" nodeVector1 parentNodes: (%d)\n", nodeVector1.parentnodeIDs)
-	fmt.Printf(" node1 unitId, nodeID: (%d, %d)\n", node1.unitID, node1.nodeID)
-	fmt.Printf(" node1 x, y: (%f, %f)\n", node1.x, node1.y)
-
-}
+// }
 
 // func NodeSequence(nodeSequence string, unitID int, x int, y int) Unit {
 // 	switch nodeSequence {
