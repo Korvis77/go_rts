@@ -4,6 +4,8 @@ package main
 // 1. Constructing the unit templates
 // 2. Creating/Loading in images into ebitimage?
 
+const unitTemplateCount = 2
+
 type UnitTemplate struct {
 	unitType  string
 	xStarting float32
@@ -28,6 +30,16 @@ type NodeVector struct {
 	ysummedforces float32
 }
 
+func UnitTemplateBuilder() {
+	for i := 0; i == unitTemplateCount; i++ {
+		unitTemplateSlice := make([]unitTemplate, 0, unitTemplateCount)
+	}		
+	curUnitTemplate := ConstructUnit("2x2")
+	append(unitTemplateSlice, curUnitTemplate)
+	curUnitTemplate := ConstructUnit("1NodeTriangle")
+	append(unitTemplateSlice, curUnitTemplate)
+}
+
 func ConstructNodeCore(
 	nodeID int,
 	x float32,
@@ -44,6 +56,8 @@ func ConstructUnit(unitTemplateString string) UnitTemplate {
 	switch unitTemplateString {
 	case "2x2":
 		unitTemplateReturned := Construct2x2UnitTemplate("2x2")
+	case "1NodeTriangle":
+		unitTemplateReturned := Construct1NodeTriangleUnitTemplate("1NodeTriangle")
 	}
 
 	return unitTemplate
