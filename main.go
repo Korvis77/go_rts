@@ -89,10 +89,12 @@ type Unit struct {
 	unitTemplate string
 }
 
-func SpawnUnit(unitIDPassed int, unitTemplatePassed string) Unit {
+func SpawnUnit2x2(unitIDPassed int, unitTemplatePassed string) Unit {
+
+	unitTemplate1 := Construct2x2UnitTemplate(unitTemplatePassed)
 	unit1 := Unit{
-		unitID: unitIDPassed
-		unitTemplate: UnitTemplate{unitTemplatePassed}
+		unitID: unitIDPassed,
+		unitTemplate: UnitTemplate{unitTemplate1}
 	}
 	return unit1
 }

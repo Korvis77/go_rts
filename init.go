@@ -39,8 +39,17 @@ func ConstructNodeCore(
 	return node
 }
 
-func ConstructUnitTemplates() {
+func ConstructUnit(unitTemplateString string) UnitTemplate {
 
+	switch unitTemplateString {
+	case "2x2":
+		unitTemplateReturned := Construct2x2UnitTemplate("2x2")
+	}
+
+	return unitTemplate
+}
+
+func ConstructUnitTemplates() {
 
 	Construct2x2UnitTemplate("2x2")
 	Construct1NodeTriangleUnitTemplate("1NodeTriangle")
@@ -69,11 +78,11 @@ func Construct2x2UnitTemplate(unitTypePassed string) UnitTemplate {
 		unitType:  "2x2",
 		xStarting: 0,
 		yStarting: 0,
-		nodeSlice: []NodeCore{node1, node2, node3, node4}}
+		nodeSlice: []NodeCore{node1, node2, node3, node4}
+	}
 
 	return unit
 }
-
 
 func Construct1NodeTriangleUnitTemplate(unitTypePassed string) UnitTemplate {
 
@@ -89,6 +98,7 @@ func Construct1NodeTriangleUnitTemplate(unitTypePassed string) UnitTemplate {
 		xStarting: 0,
 		yStarting: 0,
 		nodeSlice: []NodeCore{node1}
+	}
 
 	return unit
 }
