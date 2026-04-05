@@ -19,15 +19,15 @@ type UnitTemplateStruct struct {
 type CoreNode struct {
 	coreID           int
 	childVectorSlice []VectorNode
-	xOffset          float32
-	yOffset          float32
+	xOffset          int32
+	yOffset          int32
 }
 
 type VectorNode struct {
 	vectorID        int
 	parentCoreSlice []int
-	xOffset         float32
-	yOffset         float32
+	xOffset         int32
+	yOffset         int32
 }
 
 // 2. Build struct literal:
@@ -36,50 +36,50 @@ func Build2x2UnitTemplate() *UnitTemplateStruct {
 	vector1 := VectorNode{
 		vectorID:        1,
 		parentCoreSlice: []int{1, 4},
-		xOffset:         -2.5,
-		yOffset:         2.5,
+		xOffset:         -3,
+		yOffset:         3,
 	}
 	vector2 := VectorNode{
 		vectorID:        2,
 		parentCoreSlice: []int{1},
-		xOffset:         -2.5,
-		yOffset:         -2.5,
+		xOffset:         -3,
+		yOffset:         -3,
 	}
 	vector3 := VectorNode{
 		vectorID:        3,
 		parentCoreSlice: []int{1, 2},
-		xOffset:         2.5,
-		yOffset:         -2.5,
+		xOffset:         3,
+		yOffset:         -3,
 	}
 	vector4 := VectorNode{
 		vectorID:        4,
 		parentCoreSlice: []int{2},
-		xOffset:         2.5,
-		yOffset:         -2.5,
+		xOffset:         3,
+		yOffset:         -3,
 	}
 	vector5 := VectorNode{
 		vectorID:        5,
 		parentCoreSlice: []int{2, 3},
-		xOffset:         2.5,
-		yOffset:         2.5,
+		xOffset:         3,
+		yOffset:         3,
 	}
 	vector6 := VectorNode{
-		vectorID:        1,
+		vectorID:        6,
 		parentCoreSlice: []int{3},
-		xOffset:         2.5,
-		yOffset:         2.5,
+		xOffset:         3,
+		yOffset:         3,
 	}
 	vector7 := VectorNode{
 		vectorID:        7,
 		parentCoreSlice: []int{3, 4},
-		xOffset:         -2.5,
-		yOffset:         2.5,
+		xOffset:         -3,
+		yOffset:         3,
 	}
 	vector8 := VectorNode{
-		vectorID:        1,
+		vectorID:        8,
 		parentCoreSlice: []int{4},
-		xOffset:         -2.5,
-		yOffset:         2.5,
+		xOffset:         -3,
+		yOffset:         3,
 	}
 
 	unitTemplate := &UnitTemplateStruct{
@@ -89,28 +89,29 @@ func Build2x2UnitTemplate() *UnitTemplateStruct {
 			{
 				coreID:           1,
 				childVectorSlice: []VectorNode{vector1, vector2, vector3},
-				xOffset:          -2.5,
-				yOffset:          -2.5,
+				xOffset:          -25,
+				yOffset:          -25,
 			},
 			{
 				coreID:           2,
 				childVectorSlice: []VectorNode{vector3, vector4, vector5},
-				xOffset:          2.5,
-				yOffset:          -2.5,
+				xOffset:          25,
+				yOffset:          -25,
 			},
 			{
 				coreID:           3,
 				childVectorSlice: []VectorNode{vector5, vector6, vector7},
-				xOffset:          2.5,
-				yOffset:          2.5,
+				xOffset:          25,
+				yOffset:          25,
 			},
 			{
 				coreID:           4,
 				childVectorSlice: []VectorNode{vector7, vector8, vector1},
-				xOffset:          -2.5,
-				yOffset:          2.5,
+				xOffset:          -25,
+				yOffset:          25,
 			},
 		},
+		vectorNodeSlice: []VectorNode{vector1, vector2, vector3, vector4, vector5, vector6, vector7, vector8},
 	}
 
 	return unitTemplate
