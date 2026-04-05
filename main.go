@@ -1,62 +1,86 @@
 package main
 
 import (
-	_ "image/png"
-	"log"
+	"image/color"
+	_ "image/color"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
-type Game struct{}
+// Global Varss
 
-// Read what Claude was talking about and then do a lot of studying of theory.
-// Time to learn about how to decode an image from the image file's byte slice
+var mouseFirst rl.Vector2 // For mouse input
 
-// var (
-// 	ebitenImage *ebiten.Image
-// )
+func main() {
 
-// func init() {
-// 	// Decode an image from the image file's byte slice.
-// 	img, _, err := image.Decode(bytes.NewReader(images.Ebiten_png))
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	origEbitenImage := ebiten.NewImageFromImage(img)
+	rl.InitWindow(800, 450, "raylib [core] example - basic window")
+	defer rl.CloseWindow()
 
-// 	s := origEbitenImage.Bounds().Size()
-// 	ebitenImage = ebiten.NewImage(s.X, s.Y)
+	NodeColor := color.RGBA{0, 0, 0, 255}
+	var nodeTestText string = "testing testing"
 
-// 	op := &ebiten.DrawImageOptions{}
-// 	op.ColorScale.ScaleAlpha(1)
-// 	ebitenImage.DrawImage(origEbitenImage, op)
-// }
+	// StoreUserInputMap := map[string]bool{
+	// 	"mouse_left":  false,
+	// 	"mouse_right": false,
+	// }
 
-func (g *Game) Update() error {
-	return nil
-}
+	UnitTemplate2x2 := Build2x2UnitTemplate()
 
-func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DebugPrint(screen, "Hello, World!")
-}
+	rl.SetTargetFPS(60)
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
-}
+	for !rl.WindowShouldClose() {
+		rl.BeginDrawing()
 
-func main2() {
+		rl.ClearBackground(rl.RayWhite)
 
-	unitTemplate2x2 := Build2x2UnitTemplate()
+		PlayerInputExecutor()
 
-	CountNodesUseTemplateInterface(unitTemplate2x2)
+		rl.DrawText(nodeTestText, 190, 200, 20, rl.LightGray)
+		//rl.DrawCircle(300, 300, 300, NodeColor)
 
-	ebiten.SetWindowSize(640, 480)
-	ebiten.SetWindowTitle("Hello, World!")
-	if err := ebiten.RunGame(&Game{}); err != nil {
-		log.Fatal(err)
+		DrawUnitOutline(UnitTemplate2x2, 300, 300, NodeColor)
+
+		rl.EndDrawing()
 	}
+}
 
+func PlayerInputExecutor() {
+	// var prevMouseStart rl.Vector2
+	mouseInputCur := MouseVectorListener()
+	InputInterfaceProcessor(mouseInputCur)
+}
+
+func DrawMousePath(v1 rl.Vector2, v2 rl.Vector2, color color.RGBA) {
+	var v1x = int32(v1.X)
+	var v1y = int32(v1.Y)
+	var v2x = int32(v2.X)
+	var v2y = int32(v2.Y)
+	rl.DrawLine(v1x, v1y, v2x, v2y, color)
+}
+
+func DrawUnitOutline(unitTemplate *UnitTemplateStruct, xtransform int32, ytransform int32, nodeColor color.RGBA) {
+	vectorCount := len(unitTemplate.coreNodeSlice)
+
+	for i := 0; i < vectorCount; i++ {
+
+		j := i + 1
+
+		//Iterate on building position after applying sum of forces:
+
+		if i == vectorCount-1 {
+			vec1xpos := unitTemplate.coreNodeSlice[0].xOffset + xtransform
+			vec1ypos := unitTemplate.coreNodeSlice[0].yOffset + ytransform
+			vec2xpos := unitTemplate.coreNodeSlice[i].xOffset + xtransform
+			vec2ypos := unitTemplate.coreNodeSlice[i].yOffset + ytransform
+			rl.DrawLine(vec1xpos, vec1ypos, vec2xpos, vec2ypos, nodeColor)
+		} else {
+			vec1xpos := unitTemplate.coreNodeSlice[i].xOffset + xtransform
+			vec1ypos := unitTemplate.coreNodeSlice[i].yOffset + ytransform
+			vec2xpos := unitTemplate.coreNodeSlice[j].xOffset + xtransform
+			vec2ypos := unitTemplate.coreNodeSlice[j].yOffset + ytransform
+			rl.DrawLine(vec1xpos, vec1ypos, vec2xpos, vec2ypos, nodeColor)
+		}
+	}
 }
 
 /* vector length, this is the hypotenuse,
