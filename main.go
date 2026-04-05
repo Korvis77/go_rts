@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	_ "image/png"
 	"log"
 
@@ -48,13 +47,17 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func main() {
 
-	ConstructUnitTemplates()
+	unitTemplate2x2 := Build2x2UnitTemplate()
 
-	unit1 := SpawnUnit(1, "2x2")
-	unit2 := SpawnUnit(2, "1NodeTriangle")
+	CountNodesUseTemplateInterface(unitTemplate2x2)
 
-	fmt.Printf("(%d)", unit1.unitID)
-	fmt.Printf("(%d)", unit2.unitID)
+	//ConstructUnitTemplates()
+
+	// unit1 := SpawnUnit(1, "2x2")
+	// unit2 := SpawnUnit(2, "1NodeTriangle")
+
+	// fmt.Printf("(%d)", unit1.unitID)
+	// fmt.Printf("(%d)", unit2.unitID)
 
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Hello, World!")
@@ -84,20 +87,20 @@ func main() {
 
 }
 
-type Unit struct {
-	unitID       int
-	unitTemplate string
-}
+// type Unit struct {
+// 	unitID       int
+// 	unitTemplate string
+// }
 
-func SpawnUnit2x2(unitIDPassed int, unitTemplatePassed string) Unit {
+// func SpawnUnit2x2(unitIDPassed int, unitTemplatePassed string) Unit {
 
-	unitTemplate1 := Construct2x2UnitTemplate(unitTemplatePassed)
-	unit1 := Unit{
-		unitID: unitIDPassed,
-		unitTemplate: UnitTemplate{unitTemplate1}
-	}
-	return unit1
-}
+// 	unitTemplate1 := Construct2x2UnitTemplate(unitTemplatePassed)
+// 	unit1 := Unit{
+// 		unitID: unitIDPassed,
+// 		unitTemplate: UnitTemplate{unitTemplate1}
+// 	}
+// 	return unit1
+// }
 
 // func SpawnUnit(
 // 	unitID int,
@@ -189,11 +192,11 @@ func SpawnUnit2x2(unitIDPassed int, unitTemplatePassed string) Unit {
 // 	}
 // }
 
-func MoveUnit(xVel int, yVel int, rotation int) {
-	for i := range 1 {
-		fmt.Println(i)
-	}
-}
+// func MoveUnit(xVel int, yVel int, rotation int) {
+// 	for i := range 1 {
+// 		fmt.Println(i)
+// 	}
+// }
 
 /* vector length, this is the hypotenuse,
    hypotenuse (vector length a.k.a. offset from x and y)
