@@ -45,7 +45,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 	return 320, 240
 }
 
-func main() {
+func main2() {
 
 	unitTemplate2x2 := Build2x2UnitTemplate()
 
