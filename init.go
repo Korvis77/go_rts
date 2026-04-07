@@ -1,94 +1,154 @@
 package main
 
+import (
+	"fmt"
+)
+
 // Key initialization actions include:
 // 1. Constructing the unit templates
 // 2. Creating/Loading in images into ebitimage?
 
-type UnitTemplate struct {
-	unitType  string
-	xStarting float32
-	yStarting float32
-	nodeSlice []NodeCore
+// 1. Define struct:
+type UnitTemplateStruct struct {
+	unitID          int
+	unitType        string
+	coreNodeSlice   []CoreNode
+	vectorNodeSlice []VectorNode
 }
 
-type NodeCore struct {
-	nodeID       int
-	x            float32
-	y            float32
-	xVel         float32
-	yVel         float32
-	childVectors []NodeVector
+type CoreNode struct {
+	coreID           int
+	childVectorSlice []VectorNode
+	xOffset          int32
+	yOffset          int32
 }
 
-type NodeVector struct {
-	parentnodeIDs []int
-	xvectoroffset float32
-	yvectoroffset float32
-	xsummedforces float32
-	ysummedforces float32
+type VectorNode struct {
+	vectorID        int
+	parentCores     [][]int32
+	parentCoreSlice []int
+	xOffset         int32
+	yOffset         int32
 }
 
-func ConstructNodeCore(
-	nodeID int,
-	x float32,
-	y float32,
-	childVectors []NodeVector) NodeCore {
+// 2. Build struct literal:
+func Build2x2UnitTemplate() *UnitTemplateStruct {
 
-	node := NodeCore{nodeID, x, y, 0, 0, childVectors}
+	vector1 := VectorNode{
+		vectorID: 1,
+		parentCores: [][]int32{
+			{1, -3, 3},
+			{4, 3, 3},
+		},
+	}
+	vector2 := VectorNode{
+		vectorID: 2,
+		parentCores: [][]int32{
+			{1, -3, -3},
+		},
+	}
+	vector3 := VectorNode{
+		vectorID: 3,
+		parentCores: [][]int32{
+			{1, 3, -3},
+			{2, -3, -3},
+		},
+	}
+	vector4 := VectorNode{
+		vectorID: 4,
+		parentCores: [][]int32{
+			{2, 3, -3},
+		},
+	}
+	vector5 := VectorNode{
+		vectorID: 5,
+		parentCores: [][]int32{
+			{2, 3, 3},
+			{3, 3, -3},
+		},
+	}
+	vector6 := VectorNode{
+		vectorID: 6,
+		parentCores: [][]int32{
+			{3, 3, 3},
+		},
+	}
+	vector7 := VectorNode{
+		vectorID: 7,
+		parentCores: [][]int32{
+			{3, -3, 3},
+			{4, -3, -3},
+		},
+	}
+	vector8 := VectorNode{
+		vectorID: 8,
+		parentCores: [][]int32{
+			{4, -3, 3},
+		},
+	}
 
-	return node
+	unitTemplate := &UnitTemplateStruct{
+		unitID:   1,
+		unitType: "2x2",
+		coreNodeSlice: []CoreNode{
+			{
+				coreID:           1,
+				childVectorSlice: []VectorNode{vector1, vector2, vector3},
+				xOffset:          -25,
+				yOffset:          -25,
+			},
+			{
+				coreID:           2,
+				childVectorSlice: []VectorNode{vector3, vector4, vector5},
+				xOffset:          25,
+				yOffset:          -25,
+			},
+			{
+				coreID:           3,
+				childVectorSlice: []VectorNode{vector5, vector6, vector7},
+				xOffset:          25,
+				yOffset:          25,
+			},
+			{
+				coreID:           4,
+				childVectorSlice: []VectorNode{vector7, vector8, vector1},
+				xOffset:          -25,
+				yOffset:          25,
+			},
+		},
+		vectorNodeSlice: []VectorNode{vector1, vector2, vector3, vector4, vector5, vector6, vector7, vector8},
+	}
+
+	return unitTemplate
 }
 
-func ConstructUnitTemplates() {
+// 3. Interface for struct literal
+type UnitTemplateInterface interface {
+	NodeCount() int
+}
 
+// Now I can define different functions for different struct literals such as:
 
-	Construct2x2UnitTemplate("2x2")
-	Construct1NodeTriangleUnitTemplate("1NodeTriangle")
+func (unitTemplateLiteral *UnitTemplateStruct) NodeCount() int {
+
+	countOfNodes := len(unitTemplateLiteral.coreNodeSlice)
+
+	fmt.Printf("length in NodeCount: %d \n", countOfNodes)
+	return countOfNodes
 
 }
 
-func Construct2x2UnitTemplate(unitTypePassed string) UnitTemplate {
+func CountNodesUseTemplateInterface(unitTemplateExample UnitTemplateInterface) int {
+	testint := unitTemplateExample.NodeCount()
+	unitTemplateExample.NodeCount()
+	fmt.Printf("length through function: %d \n", unitTemplateExample.NodeCount())
 
-	//First Vector at 9 o'clock, everything goes clockwise starting at 9
-	//Offset is based off 1st vector in list FOR NOW
-	nodeVector1 := NodeVector{[]int{1, 4}, -2.5, -2.5, 0, 0}
-	nodeVector2 := NodeVector{[]int{1}, -2.5, 2.5, 0, 0}
-	nodeVector3 := NodeVector{[]int{1, 2}, 2.5, 2.5, 0, 0}
-	nodeVector4 := NodeVector{[]int{2}, 2.5, 2.5, 0, 0}
-	nodeVector5 := NodeVector{[]int{2, 3}, 2.5, -2.5, 0, 0}
-	nodeVector6 := NodeVector{[]int{3}, 2.5, 2.5, 0, 0}
-	nodeVector7 := NodeVector{[]int{3, 4}, -2.5, 2.5, 0, 0}
-	nodeVector8 := NodeVector{[]int{4}, -2.5, 2.5, 0, 0}
+	if testint == 4 {
+		fmt.Printf("this is a 2x2 \n")
+	}
+	if testint == 1 {
+		fmt.Printf("this has 1 node \n")
+	}
 
-	node1 := ConstructNodeCore(1, 0, 0, []NodeVector{nodeVector1, nodeVector2, nodeVector3})
-	node2 := ConstructNodeCore(2, 0, 0, []NodeVector{nodeVector3, nodeVector4, nodeVector5})
-	node3 := ConstructNodeCore(3, 0, 0, []NodeVector{nodeVector5, nodeVector6, nodeVector7})
-	node4 := ConstructNodeCore(4, 0, 0, []NodeVector{nodeVector7, nodeVector8, nodeVector1})
-
-	unit := UnitTemplate{
-		unitType:  "2x2",
-		xStarting: 0,
-		yStarting: 0,
-		nodeSlice: []NodeCore{node1, node2, node3, node4}}
-
-	return unit
-}
-
-
-func Construct1NodeTriangleUnitTemplate(unitTypePassed string) UnitTemplate {
-
-	//First Vector at 9 o'clock, everything goes clockwise starting at 9
-	//Offset is based off 1st vector in list FOR NOW
-	nodeVector1 := NodeVector{[]int{1}, -3, -1.5, 0, 0}
-	nodeVector2 := NodeVector{[]int{1}, 3, 0, 0, 0}
-	nodeVector3 := NodeVector{[]int{1}, -3, 1.5, 0, 0}
-
-	node1 := ConstructNodeCore(1, 0, 0, []NodeVector{nodeVector1, nodeVector2, nodeVector3})
-	unit := UnitTemplate{
-		unitType:  "1NodeTriangle",
-		xStarting: 0,
-		yStarting: 0,
-		nodeSlice: []NodeCore{node1}
-
-	return unit
+	return testint
 }
